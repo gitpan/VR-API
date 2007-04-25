@@ -4,7 +4,7 @@ use strict;
 use VR::API;
 use base qw( VR::API );
 
-our $VERSION = '1.00';
+our $VERSION = '1.01';
 
 sub _methods {
     my @enterprise_methods = VR::API::_methods( );

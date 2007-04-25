@@ -3,7 +3,7 @@ use strict;
 
 use SOAP::Lite;
 
-our $VERSION = '1.00';
+our $VERSION = '1.02';
 
 sub _uri {
     'VR/API/1_0'
@@ -14,48 +14,55 @@ sub _methods {
         addListMember
         appendFileToList
         appendFileToListBackground
+        appendTemplateCampaignModule
         calculateCampaignAudience
         canCallMethod
+        checkFreeformContent
+        createEmailCampaign
         createList
+        createOptinForm
         deleteList
         deleteListMember
+        deleteTemplateCampaignModule
         downloadCampaignRecipientResults
         downloadCampaignRecipientResultsBackground
         downloadList
         downloadListBackground
         editListAttribute
         editListMember
+        enumerateEmailCampaigns
         enumerateLists
         eraseListMembers
         getCampaignDomainCount
         getCompany
-        getListMemberByEmailAddress
+        getEmailCampaignDeclineHistory
+        getEmailCampaignResponseHistograms
+        getEmailCampaignStats
         getListDomainCount
         getListMemberByAddressHash
+        getListMemberByEmailAddress
         getListMemberByEmailAddress
         getListMemberByHash
         getListMembers
         getUser
         getUserByEmailAddress
-        login
-        refresh
-        enumerateEmailCampaigns
-        createEmailCampaign
-        setCampaignLists
-        setEmailCampaignAttribute
-        setEmailCampaignContent
-        appendTemplateCampaignModule
-        setTemplateCampaignModule
-        deleteTemplateCampaignModule
-        sendEmailCampaignTest
         launchEmailCampaign
-        unlaunchEmailCampaign
-        getEmailCampaignDeclineHistory
+        login
+        persistReferencedMediaLibraryImages
+        refresh
         renderCampaignContent
         searchListMembers
+        sendEmailCampaignTest
+        setCampaignLists
         setCustomListFields
         setDisplayedListFields
+        setEmailCampaignAttribute
+        setEmailCampaignContent
         setIndexedListFields
+        setTemplateCampaignModule
+        undeleteCampaign
+        undeleteList
+        unlaunchEmailCampaign
         validateStreetAddress
     );
 }
@@ -217,65 +224,66 @@ __END__
 
 =head1 NAME
 
-  VR::API - Communicate with VerticalResponse's API services
+VR::API - Communicate with VerticalResponse's API services
 
 =head1 SYNOPSIS
 
-  VR::API provides simplified access to the VerticalResponse API services server. It is
-  based on the SOAP::Lite package, a widely-used SOAP toolkit for Perl.
+VR::API provides simplified access to the VerticalResponse API services server. It is
+based on the SOAP::Lite package, a widely-used SOAP toolkit for Perl.
 
 =head2 Example
  
-  #!/usr/bin/perl -w
-  use strict;
-  use VR::API;
+    #!/usr/bin/perl -w
+    use strict;
+    use VR::API;
 
-  # SOAP::Lite uses Crypt::SSLeay for client-side certificate management.
-  # perldoc Crypt::SSLeay for more documentation on how these environment
-  # variables are used.
-  $ENV{HTTPS_PKCS12_FILE} = "nickverticalresponsecom.p12";
-  $ENV{HTTPS_PKCS12_PASSWORD} = "a_secret"; # Not needed for passphraseless PKCS#12 keystores
+    # SOAP::Lite uses Crypt::SSLeay for client-side certificate management.
+    # perldoc Crypt::SSLeay for more documentation on how these environment
+    # variables are used.
+    $ENV{HTTPS_PKCS12_FILE} = "nickverticalresponsecom.p12";
+    $ENV{HTTPS_PKCS12_PASSWORD} = "a_secret"; # Not needed for passphraseless PKCS#12 keystores
 
-  my $vrapi = new VR::API;
-  $vrapi->login( { username => 'nick@verticalresponse.com', password => 'another_secret' } );
+    my $vrapi = new VR::API;
+    $vrapi->login( { username => 'nick@verticalresponse.com', password => 'another_secret' } );
 
-  $vrapi->createList( {
-      name => "A new list",
-      type => "email",
-  } );
+    $vrapi->createList( {
+        name => "A new list",
+        type => "email",
+    } );
 
 =head2 Available functions
 
-  See VR::API::_methods() for a list of available functions. 
+See VR::API::_methods() for a list of available functions. 
 
 =head2 References
 
-  Enterprise API:
+Enterprise API:
 
-  https://api.verticalresponse.com/wsdl/1.0/VRAPI.wsdl
-  https://api.verticalresponse.com/wsdl/1.0/documentation.html
+L<https://api.verticalresponse.com/wsdl/1.0/VRAPI.wsdl>
+L<https://api.verticalresponse.com/wsdl/1.0/documentation.html>
 
-  Partner API (requires a valid partner certificate):
+Partner API (requires a valid partner certificate):
 
-  https://api.verticalresponse.com/partner-wsdl/1.0/VRAPI.wsdl
-  https://api.verticalresponse.com/partner-wsdl/1.0/documentation.html
+L<https://api.verticalresponse.com/partner-wsdl/1.0/VRAPI.wsdl>
+L<https://api.verticalresponse.com/partner-wsdl/1.0/documentation.html>
 
 =head1 BUGS
 
-  No known bugs. Please report bugs to api-support@verticalresponse.com
+No known bugs. Please report bugs to api-support@verticalresponse.com
 
 =head1 SEE ALSO
 
-  Download and use the sash shell L<http://sash.sourceforge.net>.  There is a VerticalResponse
-  plugin available that will help you learn and use the API more efficiently.
+Download and use the sash shell L<http://sash.sourceforge.net>.  There is a
+VerticalResponse plugin available that will help you learn and use the API
+more efficiently.
 
 =head1 CREDITS
 
-  Paul Kulchenko and Bryce Harrington, for writing a fantastic SOAP toolkit in Perl.
+Paul Kulchenko and Bryce Harrington, for writing a fantastic SOAP toolkit in Perl.
 
 =head1 MAINTAINER
 
-  Nick Marden <nick@verticalresponse.com>
+Nick Marden <nick@verticalresponse.com>
 
 =head1 COPYRIGHT
 
