@@ -11,8 +11,6 @@ sub _methods {
     return @enterprise_methods, qw(
         createCompany
         createUser
-        editCompany
-        editUser
         enumerateCompanies
     );
 }

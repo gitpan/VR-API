@@ -3,7 +3,7 @@ use strict;
 
 use SOAP::Lite;
 
-our $VERSION = '1.02';
+our $VERSION = '1.05';
 
 sub _uri {
     'VR/API/1_0'
@@ -18,20 +18,27 @@ sub _methods {
         calculateCampaignAudience
         canCallMethod
         checkFreeformContent
+        compileCampaignRecipientResults
+        compileCampaignRecipientResultsBackground
         createEmailCampaign
         createList
         createOptinForm
+        deleteCampaign
         deleteList
         deleteListMember
         deleteTemplateCampaignModule
         downloadCampaignRecipientResults
         downloadCampaignRecipientResultsBackground
+        downloadCompanyUnsubscribesAndBounces
         downloadList
         downloadListBackground
+        editCompany
         editListAttribute
         editListMember
+        editUser
         enumerateEmailCampaigns
         enumerateLists
+        enumeratePostcardCampaigns
         eraseListMembers
         getCampaignDomainCount
         getCompany
@@ -48,7 +55,6 @@ sub _methods {
         getUserByEmailAddress
         launchEmailCampaign
         login
-        persistReferencedMediaLibraryImages
         refresh
         renderCampaignContent
         searchListMembers
@@ -60,6 +66,7 @@ sub _methods {
         setEmailCampaignContent
         setIndexedListFields
         setTemplateCampaignModule
+        transferEmailCredits
         undeleteCampaign
         undeleteList
         unlaunchEmailCampaign
@@ -101,10 +108,8 @@ sub _getAction {
 sub _getArgsType {
     my $self = shift;
     my $method = shift;
-    if( 'appendFileToListBackground' eq $method ) {
-        return 'vrtypens:appendFileToListArgs';
-    } elsif( 'downloadCampaignRecipientResultsBackground' eq $method ) {
-        return 'vrtypens:downloadCampaignRecipientResultsArgs';
+    if( $method =~ /^(.+)Background$/ ) {
+        return 'vrtypens:' . $1 . 'Args';
     } else {
         return 'vrtypens:' . $method . "Args";
     }
