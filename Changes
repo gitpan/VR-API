@@ -1,3 +1,5 @@
+1.06  Tue Aug 07 20:22:00 2007
+	- Update available API methods: added getEmailCreditBalance
 1.05  Tue Aug 07 19:06:00 2007
 	- Update available API methods: added transferEmailCredits
 1.02  Tue Apr 24 21:51:03 2007

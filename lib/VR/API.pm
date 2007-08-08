@@ -3,7 +3,7 @@ use strict;
 
 use SOAP::Lite;
 
-our $VERSION = '1.05';
+our $VERSION = '1.06';
 
 sub _uri {
     'VR/API/1_0'
@@ -45,6 +45,7 @@ sub _methods {
         getEmailCampaignDeclineHistory
         getEmailCampaignResponseHistograms
         getEmailCampaignStats
+        getEmailCreditBalance
         getListDomainCount
         getListMemberByAddressHash
         getListMemberByEmailAddress
@@ -242,14 +243,8 @@ based on the SOAP::Lite package, a widely-used SOAP toolkit for Perl.
     use strict;
     use VR::API;
 
-    # SOAP::Lite uses Crypt::SSLeay for client-side certificate management.
-    # perldoc Crypt::SSLeay for more documentation on how these environment
-    # variables are used.
-    $ENV{HTTPS_PKCS12_FILE} = "nickverticalresponsecom.p12";
-    $ENV{HTTPS_PKCS12_PASSWORD} = "a_secret"; # Not needed for passphraseless PKCS#12 keystores
-
     my $vrapi = new VR::API;
-    $vrapi->login( { username => 'nick@verticalresponse.com', password => 'another_secret' } );
+    $vrapi->login( { username => 'nick@verticalresponse.com', password => 'super_secret' } );
 
     $vrapi->createList( {
         name => "A new list",
@@ -258,7 +253,12 @@ based on the SOAP::Lite package, a widely-used SOAP toolkit for Perl.
 
 =head2 Available functions
 
-See VR::API::_methods() for a list of available functions. 
+See VR::API::_methods() for a list of available functions. These functions
+correspond to the functions listed in the VR API Enterprise WSDL file.
+
+Note that it is not necessary to send the 'session_id' parameter with each
+method call; the VR::API infrastructure does that automatically after a
+successful call to login().
 
 =head2 References
 
@@ -267,24 +267,18 @@ Enterprise API:
 L<https://api.verticalresponse.com/wsdl/1.0/VRAPI.wsdl>
 L<https://api.verticalresponse.com/wsdl/1.0/documentation.html>
 
-Partner API (requires a valid partner certificate):
+=head1 SEE ALSO
 
-L<https://api.verticalresponse.com/partner-wsdl/1.0/VRAPI.wsdl>
-L<https://api.verticalresponse.com/partner-wsdl/1.0/documentation.html>
+L<VR::API::Partner>, the VR Partner API Perl module
 
 =head1 BUGS
 
 No known bugs. Please report bugs to api-support@verticalresponse.com
 
-=head1 SEE ALSO
-
-Download and use the sash shell L<http://sash.sourceforge.net>.  There is a
-VerticalResponse plugin available that will help you learn and use the API
-more efficiently.
-
 =head1 CREDITS
 
 Paul Kulchenko and Bryce Harrington, for writing a fantastic SOAP toolkit in Perl.
+Wes Bailey for help with CPAN and packaging.
 
 =head1 MAINTAINER
 
@@ -294,7 +288,7 @@ Nick Marden <nick@verticalresponse.com>
 
 Copyright (C) 2007, Nick Marden, VerticalResponse Inc.
 
-VR::API.pm is free software; you can redistribute it and/or modify
+VR::API is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 2 of the License, or
 (at your option) any later version.
